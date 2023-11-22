@@ -1,0 +1,33 @@
+def solve_knapsack():
+    n = int(input("Enter the number of items: "))
+    
+    val = [int(input(f"Enter value for item {i + 1}: ")) for i in range(n)]
+    wt = [int(input(f"Enter weight for item {i + 1}: ")) for i in range(n)]
+    
+    W = int(input("Enter the knapsack capacity: "))
+
+    # Create a memoization table to store intermediate results
+    memo = [[-1 for _ in range(W + 1)] for _ in range(n + 1)]
+
+    def knapsack(W, n): 
+        # Base case
+        if n == 0 or W == 0:
+            return 0
+        
+        # If the result is already calculated, return it
+        if memo[n][W] != -1:
+            return memo[n][W]
+
+        # Check if the current item can be included
+        if wt[n - 1] > W:
+            result = knapsack(W, n - 1)
+        else:
+            result = max(val[n - 1] + knapsack(W - wt[n - 1], n - 1), knapsack(W, n - 1))
+
+        # Memoize the result
+        memo[n][W] = result
+        return result
+
+    print("The maximum value in the knapsack is:", knapsack(W, n))
+
+solve_knapsack()
